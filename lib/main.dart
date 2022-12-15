@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       // home: Home(),
       initialRoute: LogInScreen.routeName,
       routes: {
-        "/": (context) => Home(),
+        Home.routeName: (context) => Home(),
         SplashScreen.routeName: (context) => SplashScreen(),
         LogInScreen.routeName: (context) => LogInScreen(),
       },
