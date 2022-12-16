@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:start_application/models/store_userlogInData.dart';
 import 'package:start_application/pages/signIn.dart';
 
 import 'home.dart';
@@ -23,9 +24,21 @@ class _LogInScreenState extends State<LogInScreen> {
   bool isWelcomeScreen = true;
   final _usernameControler = TextEditingController();
   final _passwordControler = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
+  final _userData = UserData();
+  late Map _userInfo;
+  //
+  //
   //Methods-------------------------------------------------------------------------
-//
+  void getUserData() async {
+    await _userData.getUserData.then((value) {
+      _userInfo = value;
+    }).onError((error, stackTrace) {
+      print('getting user data unsuccessful');
+      _userInfo = Map<String, String>();
+    });
+  }
+
 //
 //
 //
@@ -33,66 +46,68 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //Card One------------------------------------------------------
-                Card(
-                  child: Center(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //Card One-----------------------------------------------------------------------
+                  Card(
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          isWelcomeScreen ? "Welcome" : 'LogIn',
+                          textScaleFactor: 2.0,
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                  ),
+                  //
+                  // Card Two-----------------------------------------------------------------------
+                  Card(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        isWelcomeScreen ? "Welcome" : 'LogIn',
-                        textScaleFactor: 2.0,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.w600),
+                      child: AnimatedContainer(
+                        duration: Duration(seconds: 1),
+                        height: isWelcomeScreen ? 320 : 540,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset('assets/images/login.png'),
+                            const Divider(
+                              height: 5,
+                              thickness: 1.0,
+                            ),
+                            Text(
+                              'Catalog-Application',
+                              textScaleFactor: 2.0,
+                              style: GoogleFonts.pacifico(
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            const Divider(
+                              thickness: 1,
+                              height: 16,
+                            ),
+                            isWelcomeScreen
+                                ? optionWidget(context)
+                                : displayValue == DisplayValue.logIn
+                                    ? loginWidget()
+                                    : SizedBox()
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                //
-                // Card Two----------------------------------------------------------------
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: AnimatedContainer(
-                      duration: Duration(seconds: 2),
-                      height: isWelcomeScreen ? 320 : 450,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        // mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset('assets/images/login.png'),
-                          const Divider(
-                            height: 5,
-                            thickness: 1.0,
-                          ),
-                          Text(
-                            'Catalog-Application',
-                            textScaleFactor: 2.0,
-                            style: GoogleFonts.pacifico(
-                                fontWeight: FontWeight.w400),
-                          ),
-                          const Divider(
-                            thickness: 1,
-                            height: 16,
-                          ),
-                          isWelcomeScreen
-                              ? optionWidget(context)
-                              : displayValue == DisplayValue.logIn
-                                  ? loginWidget()
-                                  : SizedBox()
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -122,10 +137,13 @@ class _LogInScreenState extends State<LogInScreen> {
         ),
         ElevatedButton(
           onPressed: () async {
+            getUserData();
             setState(() {
               isWelcomeScreen = false;
             });
-            await Future.delayed(Duration(seconds: 2, microseconds: 200));
+            await Future.delayed(Duration(
+              seconds: 1,
+            ));
             setState(() {
               displayValue = DisplayValue.logIn;
             });
@@ -142,61 +160,85 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Column loginWidget() {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            border: Border(
-              left: BorderSide(
-                width: 5,
-                color: Theme.of(context).primaryColor,
+//----------------------------------------------------------------------------------
+  Form loginWidget() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  width: 5,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
             ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          margin: const EdgeInsets.symmetric(vertical: 2.5),
-          child: TextField(
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(label: Text('UserName')),
-            controller: _usernameControler,
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border(
-              left: BorderSide(width: 5, color: Theme.of(context).primaryColor),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            margin: const EdgeInsets.symmetric(vertical: 2.5),
+            child: TextFormField(
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(label: Text('UserName')),
+              validator: (value) {
+                if (_userInfo.containsKey('userName') &&
+                    _userInfo['userName'] == value!) {
+                  return null;
+                }
+                return 'UserName does not matched';
+              },
             ),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          margin: const EdgeInsets.symmetric(vertical: 2.5),
-          child: TextField(
-            keyboardType: TextInputType.visiblePassword,
-            obscureText: true,
-            decoration: const InputDecoration(label: Text('Password')),
-            controller: _passwordControler,
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                left:
+                    BorderSide(width: 5, color: Theme.of(context).primaryColor),
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            margin: const EdgeInsets.symmetric(vertical: 2.5),
+            child: TextFormField(
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: true,
+              decoration: const InputDecoration(label: Text('Password')),
+              validator: (value) {
+                if (_userInfo.containsKey('password') &&
+                    _userInfo['password'] == value!) {
+                  return null;
+                }
+                return 'Password does not matched';
+              },
+            ),
           ),
-        ),
-        ElevatedButton(
+          ElevatedButton(
             onPressed: () {
-              print('UserName : ' + _usernameControler.text);
-              print('Password : ' + _passwordControler.text);
-              setState(() {
-                _passwordControler.text = "";
-                _usernameControler.text = "";
-                displayValue = DisplayValue.none;
-                isWelcomeScreen = true;
-                // logic is remaning in this for validation
-                // Navigator.of(context).pushReplacementNamed(Home.routeName);
-              });
+              if (_formKey.currentState!.validate()) {
+                Navigator.of(context).pushReplacementNamed(Home.routeName);
+              }
             },
             style: ElevatedButton.styleFrom(elevation: 0.0),
             child: const Center(
-                child: Text(
-              'Login',
-              textScaleFactor: 1.5,
-            )))
-      ],
+              child: Text(
+                'Login',
+                textScaleFactor: 1.5,
+              ),
+            ),
+          ),
+          ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  displayValue = DisplayValue.none;
+                  isWelcomeScreen = true;
+                });
+              },
+              child: Center(
+                  child: Text(
+                'Back',
+                textScaleFactor: 1.5,
+              )))
+        ],
+      ),
     );
   }
 }

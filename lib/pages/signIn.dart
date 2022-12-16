@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:start_application/models/store_userlogInData.dart';
+import 'package:start_application/pages/home.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({super.key});
@@ -7,6 +9,7 @@ class SignInPage extends StatelessWidget {
   //Varibles
   late String _username;
   late String _password;
+  final userData = UserData();
 
   //Form Controler
   final _passwordControler = TextEditingController();
@@ -51,7 +54,9 @@ class SignInPage extends StatelessWidget {
                           }
                           return null;
                         }),
-                        onSaved: ((newValue) {}),
+                        onSaved: ((newValue) {
+                          _username = newValue!;
+                        }),
                       ),
                     ),
                     Padding(
@@ -69,7 +74,9 @@ class SignInPage extends StatelessWidget {
                           }
                           return null;
                         }),
-                        onSaved: ((newValue) {}),
+                        onSaved: ((newValue) {
+                          _password = newValue!;
+                        }),
                       ),
                     ),
                     Padding(
@@ -87,16 +94,32 @@ class SignInPage extends StatelessWidget {
                           }
                           return null;
                         }),
-                        onSaved: ((newValue) {}),
                       ),
                     ),
                     //DatePicker
                     //
                     ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           print("Clicked");
                           if (_formKey.currentState!.validate()) {
-                            print('Pass');
+                            print('Validation Pass');
+                            _formKey.currentState!.save();
+                            print(_username);
+                            print(_password);
+                            await userData
+                                .setUserData(
+                              userName: _username,
+                              password: _password,
+                            )
+                                .then((value) {
+                              if (value) {
+                                print('Success');
+                                Navigator.of(context)
+                                    .pushReplacementNamed(Home.routeName);
+                              } else {
+                                print('Error');
+                              }
+                            });
                           }
                         },
                         child: const Center(
