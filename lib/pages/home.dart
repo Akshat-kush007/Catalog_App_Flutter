@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/mydrawer.dart';
+
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
   static final routeName = '/home';
@@ -8,6 +10,12 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home'),
+      ),
+      // body: ,
+      drawer: MyDrawer(),
+    );
   }
 }

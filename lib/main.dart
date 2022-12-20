@@ -23,6 +23,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
         canvasColor: Colors.grey[200],
         textTheme: GoogleFonts.latoTextTheme(),
+        appBarTheme: AppBarTheme(
+            color: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
+            elevation: 0.0,
+            toolbarTextStyle: Theme.of(context).textTheme.bodyText2,
+            titleTextStyle: Theme.of(context).textTheme.headline6),
       ),
       // home: Home(),
       initialRoute: Home.routeName,
