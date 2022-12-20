@@ -81,7 +81,10 @@ class _LogInScreenState extends State<LogInScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           // mainAxisSize: MainAxisSize.min,
                           children: [
-                            Image.asset('assets/images/login.png'),
+                            Image.asset(
+                              'assets/images/login.png',
+                              fit: BoxFit.cover,
+                            ),
                             const Divider(
                               height: 5,
                               thickness: 1.0,

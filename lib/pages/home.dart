@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  Home({Key? key}) : super(key: key);
   static final routeName = '/home';
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('New App'),
-      ),
-      body: Center(
-        child: Text('A new Starting'),
-      ),
-    );
+    return Scaffold();
   }
 }

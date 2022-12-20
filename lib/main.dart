@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme(),
       ),
       // home: Home(),
-      initialRoute: LogInScreen.routeName,
+      initialRoute: Home.routeName,
       routes: {
         Home.routeName: (context) => Home(),
         SplashScreen.routeName: (context) => SplashScreen(),
