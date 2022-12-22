@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
         canvasColor: Colors.grey[200],
-        textTheme: GoogleFonts.latoTextTheme(),
+        textTheme: GoogleFonts.poppinsTextTheme(),
         appBarTheme: AppBarTheme(
             color: Colors.white,
             iconTheme: IconThemeData(color: Colors.black),
